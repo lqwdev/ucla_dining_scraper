@@ -35,21 +35,29 @@ fn parse_section_items(section: &ElementRef) -> Vec<Item> {
     section
         .select(&Selector::parse("li").unwrap())
         .filter(|e| e.value().attr("class") == Some("menu-item"))
-        .map(|item| Item {
-            name: parse_item_name(&item),
-        })
+        .map(|item| parse_item(&item))
         .collect()
 }
 
-fn parse_item_name(item: &ElementRef) -> String {
-    item.select(&Selector::parse("a").unwrap())
+fn parse_item(item: &ElementRef) -> Item {
+    let node = item
+        .select(&Selector::parse("a").unwrap())
         .filter(|e| e.value().attr("class") == Some("recipelink"))
         .nth(0)
-        .unwrap()
-        .text()
-        .nth(0)
-        .unwrap()
-        .into()
+        .unwrap();
+
+    Item {
+        name: parse_item_name(&node),
+        recipe_link: parse_item_recipe_link(&node),
+    }
+}
+
+fn parse_item_name(item: &ElementRef) -> String {
+    item.text().nth(0).unwrap().into()
+}
+
+fn parse_item_recipe_link(item: &ElementRef) -> String {
+    item.value().attr("href").unwrap().into()
 }
 
 #[cfg(test)]
@@ -162,9 +170,11 @@ mod tests {
                 items: vec![
                     Item {
                         name: "Italian Minestrone Soup".into(),
+                        recipe_link: "http://menu.dining.ucla.edu/Recipes/977026/6".into(),
                     },
                     Item {
                         name: "Turkey & Rice Soup".into(),
+                        recipe_link: "http://menu.dining.ucla.edu/Recipes/977085/6".into(),
                     },
                 ],
             },
@@ -173,12 +183,15 @@ mod tests {
                 items: vec![
                     Item {
                         name: "Fusilli Fruiti De Mari".into(),
+                        recipe_link: "http://menu.dining.ucla.edu/Recipes/123056/6".into(),
                     },
                     Item {
                         name: "Toasted Herb & Cheese Bread".into(),
+                        recipe_link: "http://menu.dining.ucla.edu/Recipes/138012/1".into(),
                     },
                     Item {
                         name: "Roasted Vegetables".into(),
+                        recipe_link: "http://menu.dining.ucla.edu/Recipes/141301/2".into(),
                     },
                 ],
             },
