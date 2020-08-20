@@ -3,7 +3,7 @@ use crate::model::{Meal, Restaurant};
 use itertools::Itertools;
 use strum::IntoEnumIterator;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct Request {
     pub date: String,
     pub restaurant: Restaurant,
