@@ -1,11 +1,11 @@
-use crate::model::{Item, Page, Section};
+use crate::model::{Item, Menu, Section};
 use crate::request::Request;
 use scraper::element_ref::ElementRef;
 use scraper::{Html, Selector};
 
-pub fn parse(doc: &str, request: &Request) -> Page {
+pub fn parse(doc: &str, request: &Request) -> Menu {
     let sections = parse_sections(&Html::parse_document(doc));
-    Page {
+    Menu {
         date: request.date.clone(),
         restaurant: request.restaurant.clone(),
         meal: request.meal.clone(),

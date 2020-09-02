@@ -3,14 +3,14 @@ use std::fmt;
 use strum_macros::EnumIter;
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
-pub struct Page {
+pub struct Menu {
     pub date: String,
     pub restaurant: Restaurant,
     pub meal: Meal,
     pub sections: Vec<Section>,
 }
 
-impl fmt::Display for Page {
+impl fmt::Display for Menu {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(
             f,

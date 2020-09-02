@@ -3,7 +3,7 @@ mod model;
 mod parse;
 mod request;
 
-use model::Page;
+use model::Menu;
 use request::Request;
 
 #[tokio::main]
@@ -20,13 +20,13 @@ async fn fetch_and_print(request: &Request) -> Result<(), Box<dyn std::error::Er
     let url = request.url();
     println!("Fetching: {}", url);
 
-    let page = fetch_and_parse(request).await?;
-    println!("{}", page);
+    let menu = fetch_and_parse(request).await?;
+    println!("{}", menu);
 
     Ok(())
 }
 
-async fn fetch_and_parse(request: &Request) -> Result<Page, Box<dyn std::error::Error>> {
+async fn fetch_and_parse(request: &Request) -> Result<Menu, Box<dyn std::error::Error>> {
     let body = reqwest::get(request.url().as_str()).await?.text().await?;
     let page = parse::parse(body.as_str(), &request);
     Ok(page)
