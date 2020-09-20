@@ -9,9 +9,15 @@ use request::Request;
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let requests = request::menu_requests();
     for request in requests {
+        print!(
+            "{} {} for {} ... \t",
+            request.date,
+            request.meal.name(),
+            request.restaurant.name()
+        );
         if let Ok(body) = fetch(&request).await {
-            let menu = parse::parse(body.as_str(), &request);
-            println!("{}", menu)
+            let _menu = parse::parse(body.as_str(), &request);
+            println!("[done]");
         }
     }
     Ok(())
