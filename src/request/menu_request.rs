@@ -1,9 +1,9 @@
 use crate::date;
 use crate::model::menu::{Meal, Restaurant};
 use crate::request::Downloadable;
+use async_trait::async_trait;
 use itertools::Itertools;
 use strum::IntoEnumIterator;
-use async_trait::async_trait;
 
 #[derive(Debug, PartialEq)]
 pub struct MenuRequest {

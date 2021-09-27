@@ -13,44 +13,53 @@ fn parse_item(doc: &Html) -> ItemDetails {
     }
 }
 
-fn parse_description(doc: &Html) -> String {
-    doc.select(&Selector::parse("div").unwrap())
-        .filter(|e| e.value().attr("class") == Some("productinfo"))
-        .nth(0)
-        .unwrap()
-        .select(&Selector::parse("div").unwrap())
-        .filter(|e| e.value().attr("class") == Some("description"))
-        .nth(0)
-        .unwrap()
-        .text()
-        .nth(0)
-        .unwrap()
-        .trim()
-        .into()
+fn parse_description(doc: &Html) -> Option<String> {
+    Some(
+        doc.select(&Selector::parse("div").unwrap())
+            .filter(|e| e.value().attr("class") == Some("productinfo"))
+            .nth(0)?
+            .select(&Selector::parse("div").unwrap())
+            .filter(|e| e.value().attr("class") == Some("description"))
+            .nth(0)?
+            .text()
+            .nth(0)?
+            .trim()
+            .into(),
+    )
 }
 
-fn parse_ingredients(doc: &Html) -> String {
-    doc.select(&Selector::parse("div").unwrap())
-        .filter(|e| e.value().attr("class") == Some("ingred_allergen ia_img"))
-        .nth(0)
-        .unwrap()
-        .text()
-        .nth(2)
-        .unwrap()
-        .trim()
-        .into()
+fn parse_ingredients(doc: &Html) -> Option<String> {
+    Some(
+        doc.select(&Selector::parse("div").unwrap())
+            .filter(|e| {
+                if let Some(cls) = e.value().attr("class") {
+                    return cls.contains("ingred_allergen");
+                }
+                return false;
+            })
+            .nth(0)?
+            .text()
+            .nth(2)?
+            .trim()
+            .into(),
+    )
 }
 
-fn parse_allergens(doc: &Html) -> String {
-    doc.select(&Selector::parse("div").unwrap())
-        .filter(|e| e.value().attr("class") == Some("ingred_allergen ia_img"))
-        .nth(0)
-        .unwrap()
-        .text()
-        .nth(5)
-        .unwrap()
-        .trim()
-        .into()
+fn parse_allergens(doc: &Html) -> Option<String> {
+    Some(
+        doc.select(&Selector::parse("div").unwrap())
+            .filter(|e| {
+                if let Some(cls) = e.value().attr("class") {
+                    return cls.contains("ingred_allergen");
+                }
+                return false;
+            })
+            .nth(0)?
+            .text()
+            .nth(5)?
+            .trim()
+            .into(),
+    )
 }
 
 #[cfg(test)]

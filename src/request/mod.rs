@@ -5,7 +5,6 @@ use async_trait::async_trait;
 
 #[async_trait]
 pub trait Downloadable {
-
     fn url(&self) -> String;
 
     async fn download(&self) -> Result<String, Box<dyn std::error::Error>> {

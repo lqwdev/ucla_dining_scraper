@@ -4,6 +4,7 @@ mod parse;
 mod request;
 
 use clap::{App, Arg, ArgMatches};
+use parse::parse_item;
 use parse::parse_menu;
 use request::menu_request;
 use request::menu_request::MenuRequest;
@@ -16,17 +17,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .author("Qingwei Lan <qingweilandeveloper@gmail.com>")
         .about("Scrapes UClA dining website for menus and downloads the data")
         .arg(
-            Arg::with_name("print")
-                .short("p")
-                .long("print")
-                .help("Print the downloaded menus content"),
-        )
-        .arg(
             Arg::with_name("all")
                 .short("a")
                 .long("all")
                 .help("Download all menus starting from current date")
                 .conflicts_with("date"),
+        )
+        .arg(
+            Arg::with_name("with-details")
+                .short("d")
+                .long("with-details")
+                .help("Download menus along all item details"),
         )
         .arg(
             Arg::with_name("date")
@@ -52,12 +53,21 @@ async fn run(app: &ArgMatches<'_>) -> Result<(), Box<dyn std::error::Error>> {
         );
 
         if let Ok(body) = request.download().await {
-            let menu = parse_menu::parse(body.as_str(), &request);
+            let mut menu = parse_menu::parse(body.as_str(), &request);
             println!("[done]");
 
-            if app.is_present("print") {
-                println!("{}", menu);
+            if app.is_present("with-details") {
+                // Download all item details
+                for section in &mut menu.sections {
+                    for item in &mut section.items {
+                        item.set_details(parse_item::parse(
+                            item.details_request().download().await?.as_str(),
+                        ))
+                    }
+                }
             }
+
+            println!("{}", menu);
         }
     }
 

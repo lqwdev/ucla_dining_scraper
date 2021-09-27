@@ -37,7 +37,7 @@ pub struct Section {
 
 impl fmt::Display for Section {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "Section: {}", self.name)?;
+        writeln!(f, "Section: {}\n", self.name)?;
         for item in &self.items {
             writeln!(f, "{}", item)?;
         }
