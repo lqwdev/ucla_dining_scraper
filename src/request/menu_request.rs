@@ -3,6 +3,7 @@ use crate::model::menu::{Meal, Restaurant};
 use crate::request::Downloadable;
 use itertools::Itertools;
 use strum::IntoEnumIterator;
+use async_trait::async_trait;
 
 #[derive(Debug, PartialEq)]
 pub struct MenuRequest {
@@ -11,6 +12,7 @@ pub struct MenuRequest {
     pub meal: Meal,
 }
 
+#[async_trait]
 impl Downloadable for MenuRequest {
     fn url(&self) -> String {
         format!(

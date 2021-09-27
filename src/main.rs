@@ -2,12 +2,12 @@ mod date;
 mod model;
 mod parse;
 mod request;
-mod download;
 
 use clap::{App, Arg, ArgMatches};
 use parse::parse_menu;
 use request::menu_request;
 use request::menu_request::MenuRequest;
+use request::Downloadable;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -51,7 +51,7 @@ async fn run(app: &ArgMatches<'_>) -> Result<(), Box<dyn std::error::Error>> {
             request.restaurant.name()
         );
 
-        if let Ok(body) = download::fetch(&request).await {
+        if let Ok(body) = request.download().await {
             let menu = parse_menu::parse(body.as_str(), &request);
             println!("[done]");
 
