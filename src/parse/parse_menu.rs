@@ -54,6 +54,7 @@ fn parse_item(item: &ElementRef) -> Item {
         id: parse_id(&recipe_link),
         name: parse_item_name(&node),
         recipe_link: recipe_link,
+        details: None,
     }
 }
 
@@ -198,11 +199,13 @@ mod tests {
                         id: "977026".into(),
                         name: "Italian Minestrone Soup".into(),
                         recipe_link: "http://menu.dining.ucla.edu/Recipes/977026/6".into(),
+                        details: None,
                     },
                     Item {
                         id: "977085".into(),
                         name: "Turkey & Rice Soup".into(),
                         recipe_link: "http://menu.dining.ucla.edu/Recipes/977085/6".into(),
+                        details: None,
                     },
                 ],
             },
@@ -213,16 +216,19 @@ mod tests {
                         id: "123056".into(),
                         name: "Fusilli Fruiti De Mari".into(),
                         recipe_link: "http://menu.dining.ucla.edu/Recipes/123056/6".into(),
+                        details: None,
                     },
                     Item {
                         id: "138012".into(),
                         name: "Toasted Herb & Cheese Bread".into(),
                         recipe_link: "http://menu.dining.ucla.edu/Recipes/138012/1".into(),
+                        details: None,
                     },
                     Item {
                         id: "141301".into(),
                         name: "Roasted Vegetables".into(),
                         recipe_link: "http://menu.dining.ucla.edu/Recipes/141301/2".into(),
+                        details: None,
                     },
                 ],
             },
