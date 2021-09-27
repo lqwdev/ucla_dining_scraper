@@ -1,6 +1,6 @@
 use crate::model::item::Item;
 use crate::model::menu::{Menu, Section};
-use crate::request::Request;
+use crate::request::menu_request::Request;
 use scraper::element_ref::ElementRef;
 use scraper::{Html, Selector};
 use url::Url;

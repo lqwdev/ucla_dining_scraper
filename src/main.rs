@@ -5,7 +5,8 @@ mod request;
 
 use clap::{App, Arg, ArgMatches};
 use parse::parse_menu;
-use request::Request;
+use request::menu_request;
+use request::menu_request::Request;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -70,10 +71,10 @@ async fn fetch(request: &Request) -> Result<String, Box<dyn std::error::Error>> 
 fn get_requests(app: &ArgMatches) -> Vec<Request> {
     // Get all menu requests starting from today until a week later
     if app.is_present("all") {
-        return request::get_all_menu_requests();
+        return menu_request::get_all_menu_requests();
     }
 
     // Get menu request for specific date
     let date = app.value_of("date").unwrap();
-    return request::menu_requests_for_dates(vec![date.into()]);
+    return menu_request::menu_requests_for_dates(vec![date.into()]);
 }
