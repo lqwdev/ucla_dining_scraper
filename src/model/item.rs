@@ -16,7 +16,7 @@ impl fmt::Display for Item {
         writeln!(f, "  Recipe Link: {}", self.recipe_link)?;
         writeln!(f, "  {}", match &self.details {
             Some(details) => details.to_string(),
-            None => "Not Downloaded".to_string(),
+            None => "Details Not Downloaded".to_string(),
         })
     }
 }
