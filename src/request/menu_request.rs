@@ -4,13 +4,13 @@ use itertools::Itertools;
 use strum::IntoEnumIterator;
 
 #[derive(Debug, PartialEq)]
-pub struct Request {
+pub struct MenuRequest {
     pub date: String,
     pub restaurant: Restaurant,
     pub meal: Meal,
 }
 
-impl Request {
+impl MenuRequest {
     pub fn url(&self) -> String {
         format!(
             "http://menu.dining.ucla.edu/Menus/{}/{}/{}",
@@ -22,12 +22,12 @@ impl Request {
 }
 
 /// Get all menu requests starting from current date until 7 days later
-pub fn get_all_menu_requests() -> Vec<Request> {
+pub fn get_all_menu_requests() -> Vec<MenuRequest> {
     menu_requests_for_dates(date::get_all_dates())
 }
 
 /// Get all menu requests for a list of specific dates
-pub fn menu_requests_for_dates(dates: Vec<String>) -> Vec<Request> {
+pub fn menu_requests_for_dates(dates: Vec<String>) -> Vec<MenuRequest> {
     for date in &dates {
         verify_date(date);
     }
@@ -39,8 +39,8 @@ pub fn menu_requests_for_dates(dates: Vec<String>) -> Vec<Request> {
         .collect()
 }
 
-fn menu_request(date: String, restaurant: Restaurant, meal: Meal) -> Request {
-    Request {
+fn menu_request(date: String, restaurant: Restaurant, meal: Meal) -> MenuRequest {
+    MenuRequest {
         date: date,
         restaurant: restaurant,
         meal: meal,
