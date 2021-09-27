@@ -4,6 +4,7 @@ mod parse;
 mod request;
 
 use clap::{App, Arg, ArgMatches};
+use parse::parse_menu;
 use request::Request;
 
 #[tokio::main]
@@ -49,7 +50,7 @@ async fn run(app: &ArgMatches<'_>) -> Result<(), Box<dyn std::error::Error>> {
         );
 
         if let Ok(body) = fetch(&request).await {
-            let menu = parse::parse(body.as_str(), &request);
+            let menu = parse_menu::parse(body.as_str(), &request);
             println!("[done]");
 
             if app.is_present("print") {
