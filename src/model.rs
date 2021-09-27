@@ -59,20 +59,25 @@ impl fmt::Display for Section {
 
 #[derive(Debug, EnumIter, Serialize, Deserialize, PartialEq, Clone)]
 pub enum Restaurant {
+    BruinPlate,
     DeNeve,
+    Epicuria,
 }
 
 impl Restaurant {
     pub fn name(&self) -> String {
         match self {
+            Self::BruinPlate => "Bruin Plate".into(),
             Self::DeNeve => "De Neve".into(),
+            Self::Epicuria => "Epicuria".into(),
         }
     }
 
     pub fn url_name(&self) -> String {
         match self {
+            Self::BruinPlate => "BruinPlate".into(),
             Self::DeNeve => "DeNeve".into(),
-        }
+            Self::Epicuria => "Epicuria".into(),        }
     }
 }
 
