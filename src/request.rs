@@ -1,5 +1,5 @@
 use crate::date;
-use crate::model::{Meal, Restaurant};
+use crate::model::menu::{Meal, Restaurant};
 use itertools::Itertools;
 use strum::IntoEnumIterator;
 
