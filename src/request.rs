@@ -21,10 +21,12 @@ impl Request {
     }
 }
 
-pub fn menu_requests() -> Vec<Request> {
-    menu_requests_for_dates(date::dates())
+/// Get all menu requests starting from current date until 7 days later
+pub fn get_all_menu_requests() -> Vec<Request> {
+    menu_requests_for_dates(date::get_all_dates())
 }
 
+/// Get all menu requests for a list of specific dates
 pub fn menu_requests_for_dates(dates: Vec<String>) -> Vec<Request> {
     for date in &dates {
         verify_date(date);

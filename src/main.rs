@@ -38,11 +38,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 async fn run(app: &ArgMatches<'_>) -> Result<(), Box<dyn std::error::Error>> {
-    let requests = parse_requests(app);
+    let requests = get_requests(app);
 
     for request in requests {
         print!(
-            "{} {} for {} ... \t",
+            "Fetching {} {} for {} ... \t",
             request.date,
             request.meal.name(),
             request.restaurant.name()
@@ -52,7 +52,7 @@ async fn run(app: &ArgMatches<'_>) -> Result<(), Box<dyn std::error::Error>> {
             let menu = parse::parse(body.as_str(), &request);
             println!("[done]");
 
-            if should_print(&app) {
+            if app.is_present("print") {
                 println!("{}", menu);
             }
         }
@@ -66,15 +66,13 @@ async fn fetch(request: &Request) -> Result<String, Box<dyn std::error::Error>> 
     Ok(body)
 }
 
-fn parse_requests(app: &ArgMatches) -> Vec<Request> {
+fn get_requests(app: &ArgMatches) -> Vec<Request> {
+    // Get all menu requests starting from today until a week later
     if app.is_present("all") {
-        return request::menu_requests();
+        return request::get_all_menu_requests();
     }
 
+    // Get menu request for specific date
     let date = app.value_of("date").unwrap();
     return request::menu_requests_for_dates(vec![date.into()]);
-}
-
-fn should_print(app: &ArgMatches) -> bool {
-    app.is_present("print")
 }

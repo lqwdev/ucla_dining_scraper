@@ -1,11 +1,13 @@
 use chrono::{DateTime, Datelike, Duration, FixedOffset, TimeZone, Utc};
 
-pub fn dates() -> Vec<String> {
+/// Returns a list of dates starting from the current date and ending 7 days later.
+pub fn get_all_dates() -> Vec<String> {
     let current_date = FixedOffset::west(7 * 3600).from_utc_datetime(&Utc::now().naive_utc());
-    dates_from_current_date(current_date)
+    dates_from_date(current_date)
 }
 
-fn dates_from_current_date(current_date: DateTime<FixedOffset>) -> Vec<String> {
+/// Returns a list of dates starting from a specific date and ending 7 days later.
+fn dates_from_date(current_date: DateTime<FixedOffset>) -> Vec<String> {
     (0..7)
         .map(|num| current_date + Duration::days(num))
         .map(|date| {
@@ -27,7 +29,7 @@ mod tests {
         let current_date = FixedOffset::west(7 * 3600)
             .from_utc_datetime(&NaiveDate::from_ymd(2020, 8, 20).and_hms(10, 0, 0));
         assert_eq!(
-            dates_from_current_date(current_date),
+            dates_from_date(current_date),
             vec![
                 "2020-08-20",
                 "2020-08-21",
