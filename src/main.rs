@@ -2,6 +2,7 @@ mod date;
 mod model;
 mod parse;
 mod request;
+mod download;
 
 use clap::{App, Arg, ArgMatches};
 use parse::parse_menu;
@@ -50,7 +51,7 @@ async fn run(app: &ArgMatches<'_>) -> Result<(), Box<dyn std::error::Error>> {
             request.restaurant.name()
         );
 
-        if let Ok(body) = fetch(&request).await {
+        if let Ok(body) = download::fetch(&request).await {
             let menu = parse_menu::parse(body.as_str(), &request);
             println!("[done]");
 
@@ -61,11 +62,6 @@ async fn run(app: &ArgMatches<'_>) -> Result<(), Box<dyn std::error::Error>> {
     }
 
     Ok(())
-}
-
-async fn fetch(request: &MenuRequest) -> Result<String, Box<dyn std::error::Error>> {
-    let body = reqwest::get(request.url().as_str()).await?.text().await?;
-    Ok(body)
 }
 
 fn get_requests(app: &ArgMatches) -> Vec<MenuRequest> {

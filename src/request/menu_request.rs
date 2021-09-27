@@ -1,5 +1,6 @@
 use crate::date;
 use crate::model::menu::{Meal, Restaurant};
+use crate::request::Downloadable;
 use itertools::Itertools;
 use strum::IntoEnumIterator;
 
@@ -10,8 +11,8 @@ pub struct MenuRequest {
     pub meal: Meal,
 }
 
-impl MenuRequest {
-    pub fn url(&self) -> String {
+impl Downloadable for MenuRequest {
+    fn url(&self) -> String {
         format!(
             "http://menu.dining.ucla.edu/Menus/{}/{}/{}",
             self.restaurant.url_name(),
