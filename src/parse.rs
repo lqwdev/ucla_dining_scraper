@@ -2,6 +2,7 @@ use crate::model::{Item, Menu, Section};
 use crate::request::Request;
 use scraper::element_ref::ElementRef;
 use scraper::{Html, Selector};
+use url::Url;
 
 pub fn parse(doc: &str, request: &Request) -> Menu {
     let sections = parse_sections(&Html::parse_document(doc));
@@ -46,9 +47,12 @@ fn parse_item(item: &ElementRef) -> Item {
         .nth(0)
         .unwrap();
 
+    let recipe_link = parse_item_recipe_link(&node);
+
     Item {
+        id: parse_id(&recipe_link),
         name: parse_item_name(&node),
-        recipe_link: parse_item_recipe_link(&node),
+        recipe_link: recipe_link,
     }
 }
 
@@ -60,9 +64,30 @@ fn parse_item_recipe_link(item: &ElementRef) -> String {
     item.value().attr("href").unwrap().into()
 }
 
+fn parse_id(recipe_link: &String) -> String {
+    let parsed_url = Url::parse(recipe_link.as_str()).unwrap();
+    return parsed_url.path_segments().unwrap().nth(1).unwrap().into();
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn test_parse_id() {
+        assert_eq!(
+            parse_id(&"http://menu.dining.ucla.edu/Recipes/977026/6".into()),
+            "977026".to_string(),
+        );
+        assert_eq!(
+            parse_id(&"http://menu.dining.ucla.edu/Recipes/977085/6".into()),
+            "977085".to_string(),
+        );
+        assert_eq!(
+            parse_id(&"http://menu.dining.ucla.edu/Recipes/141301/2".into()),
+            "141301".to_string(),
+        );
+    }
 
     #[test]
     fn test_parse_document() {
@@ -169,10 +194,12 @@ mod tests {
                 name: "Flex Bar".into(),
                 items: vec![
                     Item {
+                        id: "977026".into(),
                         name: "Italian Minestrone Soup".into(),
                         recipe_link: "http://menu.dining.ucla.edu/Recipes/977026/6".into(),
                     },
                     Item {
+                        id: "977085".into(),
                         name: "Turkey & Rice Soup".into(),
                         recipe_link: "http://menu.dining.ucla.edu/Recipes/977085/6".into(),
                     },
@@ -182,14 +209,17 @@ mod tests {
                 name: "The Front Burner".into(),
                 items: vec![
                     Item {
+                        id: "123056".into(),
                         name: "Fusilli Fruiti De Mari".into(),
                         recipe_link: "http://menu.dining.ucla.edu/Recipes/123056/6".into(),
                     },
                     Item {
+                        id: "138012".into(),
                         name: "Toasted Herb & Cheese Bread".into(),
                         recipe_link: "http://menu.dining.ucla.edu/Recipes/138012/1".into(),
                     },
                     Item {
+                        id: "141301".into(),
                         name: "Roasted Vegetables".into(),
                         recipe_link: "http://menu.dining.ucla.edu/Recipes/141301/2".into(),
                     },

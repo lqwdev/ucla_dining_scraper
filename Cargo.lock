@@ -1522,6 +1522,7 @@ dependencies = [
  "strum",
  "strum_macros",
  "tokio",
+ "url",
 ]
 
 [[package]]
