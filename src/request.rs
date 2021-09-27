@@ -88,16 +88,44 @@ mod tests {
     use super::*;
 
     #[test]
+    fn test_menu_request_url() {
+        assert_eq!(
+            menu_request("2021-09-28".into(), Restaurant::BruinPlate, Meal::Breakfast).url(),
+            "http://menu.dining.ucla.edu/Menus/BruinPlate/2021-09-28/Breakfast",
+        );
+        assert_eq!(
+            menu_request("2021-09-28".into(), Restaurant::DeNeve, Meal::Breakfast).url(),
+            "http://menu.dining.ucla.edu/Menus/DeNeve/2021-09-28/Breakfast",
+        );
+        assert_eq!(
+            menu_request("2021-09-26".into(), Restaurant::Epicuria, Meal::Lunch).url(),
+            "http://menu.dining.ucla.edu/Menus/Epicuria/2021-09-26/Lunch",
+        );
+    }
+
+    #[test]
     fn test_menu_requests_for_dates() {
         assert_eq!(
             menu_requests_for_dates(vec!["2020-08-18".into(), "2020-08-19".into()]),
             vec![
+                menu_request("2020-08-18".into(), Restaurant::BruinPlate, Meal::Breakfast),
+                menu_request("2020-08-18".into(), Restaurant::BruinPlate, Meal::Lunch),
+                menu_request("2020-08-18".into(), Restaurant::BruinPlate, Meal::Dinner),
+                menu_request("2020-08-19".into(), Restaurant::BruinPlate, Meal::Breakfast),
+                menu_request("2020-08-19".into(), Restaurant::BruinPlate, Meal::Lunch),
+                menu_request("2020-08-19".into(), Restaurant::BruinPlate, Meal::Dinner),
                 menu_request("2020-08-18".into(), Restaurant::DeNeve, Meal::Breakfast),
                 menu_request("2020-08-18".into(), Restaurant::DeNeve, Meal::Lunch),
                 menu_request("2020-08-18".into(), Restaurant::DeNeve, Meal::Dinner),
                 menu_request("2020-08-19".into(), Restaurant::DeNeve, Meal::Breakfast),
                 menu_request("2020-08-19".into(), Restaurant::DeNeve, Meal::Lunch),
                 menu_request("2020-08-19".into(), Restaurant::DeNeve, Meal::Dinner),
+                menu_request("2020-08-18".into(), Restaurant::Epicuria, Meal::Breakfast),
+                menu_request("2020-08-18".into(), Restaurant::Epicuria, Meal::Lunch),
+                menu_request("2020-08-18".into(), Restaurant::Epicuria, Meal::Dinner),
+                menu_request("2020-08-19".into(), Restaurant::Epicuria, Meal::Breakfast),
+                menu_request("2020-08-19".into(), Restaurant::Epicuria, Meal::Lunch),
+                menu_request("2020-08-19".into(), Restaurant::Epicuria, Meal::Dinner),
             ]
         );
     }

@@ -77,7 +77,8 @@ impl Restaurant {
         match self {
             Self::BruinPlate => "BruinPlate".into(),
             Self::DeNeve => "DeNeve".into(),
-            Self::Epicuria => "Epicuria".into(),        }
+            Self::Epicuria => "Epicuria".into(),
+        }
     }
 }
 
