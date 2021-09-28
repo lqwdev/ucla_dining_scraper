@@ -1,6 +1,5 @@
 use crate::model::item::Item;
 use serde::{Deserialize, Serialize};
-use std::fmt;
 use strum_macros::EnumIter;
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
@@ -11,38 +10,10 @@ pub struct Menu {
     pub sections: Vec<Section>,
 }
 
-impl fmt::Display for Menu {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(
-            f,
-            "{} {} for {}",
-            self.date,
-            self.meal.name(),
-            self.restaurant.name()
-        )?;
-        writeln!(f, "---------------------------------")?;
-
-        for section in &self.sections {
-            writeln!(f, "{}", section)?;
-        }
-        Ok(())
-    }
-}
-
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Section {
     pub name: String,
     pub items: Vec<Item>,
-}
-
-impl fmt::Display for Section {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        writeln!(f, "Section: {}\n", self.name)?;
-        for item in &self.items {
-            writeln!(f, "{}", item)?;
-        }
-        Ok(())
-    }
 }
 
 #[derive(Debug, EnumIter, Serialize, Deserialize, PartialEq, Clone)]
