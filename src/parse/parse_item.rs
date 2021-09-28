@@ -137,9 +137,9 @@ mod tests {
         let doc = scraper::Html::parse_document(html);
         let parsed = parse_item(&doc);
         let expected = ItemDetails {
-            description: "Blended Patty, American Cheese, Lettuce, Tomato, Pickle, Red Onion, Mayo, House-made Bun".into(),
-            ingredients: "Blended Burger Patty (Halal Ground Beef, Onion, Roasted Mushroom, Quinoa, Garlic Salt, Pepper), Vegan Hamburger Bun (Water, Flour, Whole Wheat Flour, Vital Wheat Gluten, Sugar, Canola Oil, Sea Salt, Yeast), Tomato, American Cheese, Red Onion, Green Leaf Lettuce, Pickles, Butter, Mayonnaise, Kosher Salt, Pepper".into(),
-            allergens: "Milk, Eggs, Wheat, Soybeans, Gluten".into(),
+            description: Some("Blended Patty, American Cheese, Lettuce, Tomato, Pickle, Red Onion, Mayo, House-made Bun".into()),
+            ingredients: Some("Blended Burger Patty (Halal Ground Beef, Onion, Roasted Mushroom, Quinoa, Garlic Salt, Pepper), Vegan Hamburger Bun (Water, Flour, Whole Wheat Flour, Vital Wheat Gluten, Sugar, Canola Oil, Sea Salt, Yeast), Tomato, American Cheese, Red Onion, Green Leaf Lettuce, Pickles, Butter, Mayonnaise, Kosher Salt, Pepper".into()),
+            allergens: Some("Milk, Eggs, Wheat, Soybeans, Gluten".into()),
         };
         assert_eq!(parsed, expected);
     }
