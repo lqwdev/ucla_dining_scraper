@@ -4,12 +4,12 @@ mod parse;
 mod request;
 
 use clap::{App, Arg, ArgMatches};
+use model::Menu;
 use parse::parse_item;
 use parse::parse_menu;
 use request::menu_request;
 use request::menu_request::MenuRequest;
 use request::Downloadable;
-use model::menu::Menu;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -68,7 +68,7 @@ async fn run(app: &ArgMatches<'_>) -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-async fn inflate_item_details(menu: &mut Menu) -> Result<(), Box<dyn std::error::Error>>  {
+async fn inflate_item_details(menu: &mut Menu) -> Result<(), Box<dyn std::error::Error>> {
     // Download all item details and inflate placeholders in Menu object
     for section in &mut menu.sections {
         for item in &mut section.items {

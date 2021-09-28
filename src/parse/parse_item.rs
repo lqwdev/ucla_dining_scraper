@@ -1,4 +1,4 @@
-use crate::model::item::ItemDetails;
+use crate::model::ItemDetails;
 use scraper::{Html, Selector};
 
 pub fn parse(doc: &str) -> ItemDetails {

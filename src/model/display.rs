@@ -1,5 +1,4 @@
-use crate::model::item::{Item, ItemDetails};
-use crate::model::menu::{Menu, Section};
+use crate::model::{Item, ItemDetails, Menu, Section};
 use std::fmt;
 
 impl fmt::Display for Menu {
