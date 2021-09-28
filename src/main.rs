@@ -9,6 +9,7 @@ use parse::parse_menu;
 use request::menu_request;
 use request::menu_request::MenuRequest;
 use request::Downloadable;
+use model::menu::Menu;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -57,20 +58,25 @@ async fn run(app: &ArgMatches<'_>) -> Result<(), Box<dyn std::error::Error>> {
             println!("[done]");
 
             if app.is_present("with-details") {
-                // Download all item details
-                for section in &mut menu.sections {
-                    for item in &mut section.items {
-                        item.set_details(parse_item::parse(
-                            item.details_request().download().await?.as_str(),
-                        ))
-                    }
-                }
+                inflate_item_details(&mut menu).await?;
             }
 
             println!("{}", menu);
         }
     }
 
+    Ok(())
+}
+
+async fn inflate_item_details(menu: &mut Menu) -> Result<(), Box<dyn std::error::Error>>  {
+    // Download all item details and inflate placeholders in Menu object
+    for section in &mut menu.sections {
+        for item in &mut section.items {
+            item.set_details(parse_item::parse(
+                item.details_request().download().await?.as_str(),
+            ))
+        }
+    }
     Ok(())
 }
 
