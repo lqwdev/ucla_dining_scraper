@@ -1,7 +1,7 @@
-use crate::model::{Item, Meal, Menu, Restaurant, Section};
+use crate::model::{Item, Menu, Section};
 use serde_json::json;
 
-trait Storage {
+pub trait Storage {
     fn to_json(&self) -> serde_json::Value;
     fn to_json_min(&self) -> serde_json::Value;
 }
@@ -64,6 +64,7 @@ impl Storage for Menu {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::model::{Meal, Restaurant};
 
     fn get_test_item() -> Item {
         Item {
