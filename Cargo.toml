@@ -19,3 +19,4 @@ url = "2.2.2"
 async-trait = "0.1.51"
 
 [lib]
+crate-type = ["lib"]
