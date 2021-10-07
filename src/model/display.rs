@@ -1,13 +1,32 @@
-use crate::request::item_request::ItemRequest;
-use serde::{Deserialize, Serialize};
+use crate::model::{Item, ItemDetails, Menu, Section};
 use std::fmt;
 
-#[derive(Serialize, Deserialize, Debug, PartialEq)]
-pub struct Item {
-    pub id: String,
-    pub name: String,
-    pub recipe_link: String,
-    pub details: Option<ItemDetails>,
+impl fmt::Display for Menu {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(
+            f,
+            "{} {} for {}",
+            self.date,
+            self.meal.name(),
+            self.restaurant.name()
+        )?;
+        writeln!(f, "---------------------------------")?;
+
+        for section in &self.sections {
+            writeln!(f, "{}", section)?;
+        }
+        Ok(())
+    }
+}
+
+impl fmt::Display for Section {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "Section: {}\n", self.name)?;
+        for item in &self.items {
+            writeln!(f, "{}", item)?;
+        }
+        Ok(())
+    }
 }
 
 impl fmt::Display for Item {
@@ -24,26 +43,6 @@ impl fmt::Display for Item {
             }
         )
     }
-}
-
-impl Item {
-    pub fn details_request(&self) -> ItemRequest {
-        ItemRequest {
-            id: self.id.clone(),
-            url: self.recipe_link.clone(),
-        }
-    }
-
-    pub fn set_details(&mut self, details: ItemDetails) {
-        self.details = Some(details);
-    }
-}
-
-#[derive(Serialize, Deserialize, Debug, PartialEq)]
-pub struct ItemDetails {
-    pub description: Option<String>,
-    pub ingredients: Option<String>,
-    pub allergens: Option<String>,
 }
 
 impl fmt::Display for ItemDetails {

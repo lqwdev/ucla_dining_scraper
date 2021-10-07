@@ -1,5 +1,4 @@
-use crate::model::item::Item;
-use crate::model::menu::{Menu, Section};
+use crate::model::{Item, Menu, Section};
 use crate::request::menu_request::MenuRequest;
 use scraper::element_ref::ElementRef;
 use scraper::{Html, Selector};

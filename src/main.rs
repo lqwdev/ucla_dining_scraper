@@ -4,11 +4,14 @@ mod parse;
 mod request;
 
 use clap::{App, Arg, ArgMatches};
+use model::storage::Storage;
+use model::Menu;
 use parse::parse_item;
 use parse::parse_menu;
 use request::menu_request;
 use request::menu_request::MenuRequest;
 use request::Downloadable;
+use std::fs::OpenOptions;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -36,6 +39,20 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 .takes_value(true)
                 .help("Specify the date (YYYY-MM-DD) for which menu to download"),
         )
+        .arg(
+            Arg::with_name("save")
+                .long("save")
+                .takes_value(true)
+                .conflicts_with("save-pretty")
+                .help("Save the downloaded data on disk in min JSON format"),
+        )
+        .arg(
+            Arg::with_name("save-pretty")
+                .long("save-pretty")
+                .takes_value(true)
+                .conflicts_with("save")
+                .help("Save the downloaded data on disk in long pretty JSON format"),
+        )
         .get_matches();
 
     run(&app).await
@@ -57,20 +74,70 @@ async fn run(app: &ArgMatches<'_>) -> Result<(), Box<dyn std::error::Error>> {
             println!("[done]");
 
             if app.is_present("with-details") {
-                // Download all item details
-                for section in &mut menu.sections {
-                    for item in &mut section.items {
-                        item.set_details(parse_item::parse(
-                            item.details_request().download().await?.as_str(),
-                        ))
-                    }
-                }
+                inflate_item_details(&mut menu).await?;
             }
 
-            println!("{}", menu);
+            if app.is_present("save") || app.is_present("save-pretty") {
+                // Get directory for which to save downloaded data
+                let dir = {
+                    if app.is_present("save") {
+                        app.value_of("save").unwrap()
+                    } else {
+                        app.value_of("save-pretty").unwrap()
+                    }
+                };
+                print!(
+                    "Storing {} {} for {} on disk to {} ... \t",
+                    request.date,
+                    request.meal.name(),
+                    request.restaurant.name(),
+                    dir,
+                );
+
+                let filename = format!(
+                    "{}-{}-{}{}",
+                    request.date,
+                    request.restaurant.url_name(),
+                    request.meal.url_name(),
+                    {
+                        if app.is_present("save-pretty") {
+                            "-pretty"
+                        } else {
+                            ""
+                        }
+                    }
+                );
+                let file = OpenOptions::new()
+                    .create(true)
+                    .truncate(true)
+                    .write(true)
+                    .open(format!("{}/{}", dir, filename))?;
+
+                if app.is_present("save") {
+                    serde_json::to_writer(file, &menu.to_json_min())?;
+                } else {
+                    serde_json::to_writer_pretty(file, &menu.to_json())?;
+                }
+
+                println!("[done]");
+            } else {
+                println!("{}", menu);
+            }
         }
     }
 
+    Ok(())
+}
+
+async fn inflate_item_details(menu: &mut Menu) -> Result<(), Box<dyn std::error::Error>> {
+    // Download all item details and inflate placeholders in Menu object
+    for section in &mut menu.sections {
+        for item in &mut section.items {
+            item.set_details(parse_item::parse(
+                item.details_request().download().await?.as_str(),
+            ))
+        }
+    }
     Ok(())
 }
 

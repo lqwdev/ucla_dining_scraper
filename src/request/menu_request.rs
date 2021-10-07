@@ -1,5 +1,5 @@
 use crate::date;
-use crate::model::menu::{Meal, Restaurant};
+use crate::model::{Meal, Restaurant};
 use crate::request::Downloadable;
 use async_trait::async_trait;
 use itertools::Itertools;
