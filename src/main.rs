@@ -64,7 +64,11 @@ async fn run(app: &ArgMatches<'_>) -> Result<(), Box<dyn std::error::Error>> {
         print!("Fetching menus for {} ... \t", date);
         if let Ok(menu) = request::download_menus(date).await {
             println!("[done]");
-            save(app, &menu)?;
+            if let Ok(()) = save(app, &menu) {
+                println!("[done]");
+            } else {
+                println!("[FAILED]");
+            }
         } else {
             println!("[FAILED]");
         }

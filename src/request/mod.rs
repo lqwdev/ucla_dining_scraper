@@ -24,14 +24,11 @@ pub async fn download_menus(date: String) -> Result<DateMenu, Box<dyn std::error
     };
 
     for request in requests {
-        println!("{:?}", request);
         if let Ok(body) = request.download().await {
             let menu = parse_menu::parse(body.as_str(), &request);
             date_menu.add_restaurant(menu);
         }
     }
-
-    println!("{:#}", date_menu.to_json());
 
     Ok(date_menu)
 }
