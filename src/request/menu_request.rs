@@ -1,4 +1,3 @@
-use crate::date;
 use crate::model::{Meal, Restaurant};
 use crate::request::Downloadable;
 use async_trait::async_trait;
@@ -22,11 +21,6 @@ impl Downloadable for MenuRequest {
             self.meal.url_name()
         )
     }
-}
-
-/// Get all menu requests starting from current date until 7 days later
-pub fn get_all_menu_requests() -> Vec<MenuRequest> {
-    menu_requests_for_dates(date::get_all_dates())
 }
 
 /// Get all menu requests for a list of specific dates

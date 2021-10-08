@@ -7,9 +7,6 @@ use clap::{App, Arg, ArgMatches};
 use model::storage::Storage;
 use model::{DateMenu, RestaurantMenu};
 use parse::parse_item;
-use parse::parse_menu;
-use request::menu_request;
-use request::menu_request::MenuRequest;
 use request::Downloadable;
 use std::fs::OpenOptions;
 
