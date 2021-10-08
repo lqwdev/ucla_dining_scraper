@@ -1,4 +1,4 @@
-use crate::model::{Item, Menu, Section};
+use crate::model::{Item, RestaurantMenu, Section};
 use serde_json::json;
 
 pub trait Storage {
@@ -38,7 +38,7 @@ impl Storage for Section {
     }
 }
 
-impl Storage for Menu {
+impl Storage for RestaurantMenu {
     fn to_json(&self) -> serde_json::Value {
         json!({
             "date": self.date,
@@ -150,8 +150,8 @@ mod tests {
         )
     }
 
-    fn get_test_menu() -> Menu {
-        Menu {
+    fn get_test_menu() -> RestaurantMenu {
+        RestaurantMenu {
             date: "2021-09-30".into(),
             restaurant: Restaurant::DeNeve,
             meal: Meal::Lunch,

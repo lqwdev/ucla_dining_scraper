@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
-pub struct Menu {
+pub struct RestaurantMenu {
     pub date: String,
     pub restaurant: Restaurant,
     pub meal: Meal,

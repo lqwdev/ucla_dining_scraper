@@ -1,7 +1,7 @@
-use crate::model::{Item, ItemDetails, Menu, Section};
+use crate::model::{Item, ItemDetails, RestaurantMenu, Section};
 use std::fmt;
 
-impl fmt::Display for Menu {
+impl fmt::Display for RestaurantMenu {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(
             f,
