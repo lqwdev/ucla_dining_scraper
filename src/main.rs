@@ -5,7 +5,7 @@ mod request;
 
 use clap::{App, Arg, ArgMatches};
 use model::storage::Storage;
-use model::RestaurantMenu;
+use model::{DateMenu, RestaurantMenu};
 use parse::parse_item;
 use parse::parse_menu;
 use request::menu_request;
@@ -59,70 +59,49 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 async fn run(app: &ArgMatches<'_>) -> Result<(), Box<dyn std::error::Error>> {
-    let requests = get_requests(app);
-
-    for request in requests {
-        print!(
-            "Fetching {} {} for {} ... \t",
-            request.date,
-            request.meal.name(),
-            request.restaurant.name()
-        );
-
-        if let Ok(body) = request.download().await {
-            let mut menu = parse_menu::parse(body.as_str(), &request);
+    let dates = get_dates(app);
+    for date in dates {
+        print!("Fetching menus for {} ... \t", date);
+        if let Ok(menu) = request::download_menus(date).await {
             println!("[done]");
+            save(app, &menu)?;
+        } else {
+            println!("[FAILED]");
+        }
+    }
+    Ok(())
+}
 
-            if app.is_present("with-details") {
-                inflate_item_details(&mut menu).await?;
-            }
-
-            if app.is_present("save") || app.is_present("save-pretty") {
-                // Get directory for which to save downloaded data
-                let dir = {
-                    if app.is_present("save") {
-                        app.value_of("save").unwrap()
-                    } else {
-                        app.value_of("save-pretty").unwrap()
-                    }
-                };
-                print!(
-                    "Storing {} {} for {} on disk to {} ... \t",
-                    request.date,
-                    request.meal.name(),
-                    request.restaurant.name(),
-                    dir,
-                );
-
-                let filename = format!(
-                    "{}-{}-{}{}",
-                    request.date,
-                    request.restaurant.url_name(),
-                    request.meal.url_name(),
-                    {
-                        if app.is_present("save-pretty") {
-                            "-pretty"
-                        } else {
-                            ""
-                        }
-                    }
-                );
-                let file = OpenOptions::new()
-                    .create(true)
-                    .truncate(true)
-                    .write(true)
-                    .open(format!("{}/{}", dir, filename))?;
-
-                if app.is_present("save") {
-                    serde_json::to_writer(file, &menu.to_json_min())?;
-                } else {
-                    serde_json::to_writer_pretty(file, &menu.to_json())?;
-                }
-
-                println!("[done]");
+fn save(app: &ArgMatches, menu: &DateMenu) -> Result<(), Box<dyn std::error::Error>> {
+    if app.is_present("save") || app.is_present("save-pretty") {
+        // Get directory for which to save downloaded data
+        let dir = {
+            if app.is_present("save") {
+                app.value_of("save").unwrap()
             } else {
-                println!("{}", menu);
+                app.value_of("save-pretty").unwrap()
             }
+        };
+        print!("Storing menus for {} on disk to {} ... \t", menu.date, dir);
+
+        let suffix = {
+            if app.is_present("save-pretty") {
+                "-pretty"
+            } else {
+                ""
+            }
+        };
+        let filename = format!("{}{}", menu.date, suffix);
+        let file = OpenOptions::new()
+            .create(true)
+            .truncate(true)
+            .write(true)
+            .open(format!("{}/{}", dir, filename))?;
+
+        if app.is_present("save") {
+            serde_json::to_writer(file, &menu.to_json_min())?;
+        } else {
+            serde_json::to_writer_pretty(file, &menu.to_json())?;
         }
     }
 
@@ -141,13 +120,12 @@ async fn inflate_item_details(menu: &mut RestaurantMenu) -> Result<(), Box<dyn s
     Ok(())
 }
 
-fn get_requests(app: &ArgMatches) -> Vec<MenuRequest> {
+fn get_dates(app: &ArgMatches) -> Vec<String> {
     // Get all menu requests starting from today until a week later
     if app.is_present("all") {
-        return menu_request::get_all_menu_requests();
+        return date::get_all_dates();
+    } else {
+        let date = app.value_of("date").unwrap();
+        return vec![date.to_string()];
     }
-
-    // Get menu request for specific date
-    let date = app.value_of("date").unwrap();
-    return menu_request::menu_requests_for_dates(vec![date.into()]);
 }

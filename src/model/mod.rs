@@ -11,6 +11,36 @@ pub struct DateMenu {
     pub restaurants: Vec<Menu>,
 }
 
+impl DateMenu {
+    pub fn add_restaurant(&mut self, rm: RestaurantMenu) {
+        if rm.sections.is_empty() {
+            return;
+        }
+
+        if let Some(pos) = self
+            .restaurants
+            .iter()
+            .position(|r| r.name == rm.restaurant)
+        {
+            let restaurant = &mut self.restaurants[pos];
+            restaurant.meals.push(MenuMeal {
+                name: rm.meal,
+                sections: rm.sections,
+            });
+        } else {
+            let mut restaurant = Menu {
+                name: rm.restaurant,
+                meals: Vec::new(),
+            };
+            restaurant.meals.push(MenuMeal {
+                name: rm.meal,
+                sections: rm.sections,
+            });
+            self.restaurants.push(restaurant);
+        }
+    }
+}
+
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Menu {
     pub name: Restaurant,
