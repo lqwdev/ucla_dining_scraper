@@ -121,7 +121,7 @@ impl Storage for RestaurantMenu {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::model::{DateMenu, Meal, Menu, MenuMeal, Restaurant};
+    use crate::model::{DateMenu, MealEnum, Menu, MenuMeal, RestaurantEnum};
 
     fn get_test_item() -> Item {
         Item {
@@ -255,8 +255,8 @@ mod tests {
     fn get_test_menu() -> RestaurantMenu {
         RestaurantMenu {
             date: "2021-09-30".into(),
-            restaurant: Restaurant::DeNeve,
-            meal: Meal::Lunch,
+            restaurant: RestaurantEnum::DeNeve,
+            meal: MealEnum::Lunch,
             sections: get_test_sections(),
         }
     }
@@ -321,7 +321,7 @@ mod tests {
 
     fn get_test_meal() -> MenuMeal {
         MenuMeal {
-            name: Meal::Lunch,
+            name: MealEnum::Lunch,
             sections: get_test_sections(),
         }
     }
@@ -382,14 +382,14 @@ mod tests {
 
     fn get_test_menu_full() -> Menu {
         Menu {
-            name: Restaurant::DeNeve,
+            name: RestaurantEnum::DeNeve,
             meals: vec![
                 MenuMeal {
-                    name: Meal::Lunch,
+                    name: MealEnum::Lunch,
                     sections: get_test_sections(),
                 },
                 MenuMeal {
-                    name: Meal::Dinner,
+                    name: MealEnum::Dinner,
                     sections: get_test_sections(),
                 },
             ],
@@ -505,27 +505,27 @@ mod tests {
             date: "2021-10-08".to_string(),
             restaurants: vec![
                 Menu {
-                    name: Restaurant::DeNeve,
+                    name: RestaurantEnum::DeNeve,
                     meals: vec![
                         MenuMeal {
-                            name: Meal::Lunch,
+                            name: MealEnum::Lunch,
                             sections: get_test_sections(),
                         },
                         MenuMeal {
-                            name: Meal::Dinner,
+                            name: MealEnum::Dinner,
                             sections: get_test_sections(),
                         },
                     ],
                 },
                 Menu {
-                    name: Restaurant::BruinPlate,
+                    name: RestaurantEnum::BruinPlate,
                     meals: vec![
                         MenuMeal {
-                            name: Meal::Breakfast,
+                            name: MealEnum::Breakfast,
                             sections: get_test_sections(),
                         },
                         MenuMeal {
-                            name: Meal::Lunch,
+                            name: MealEnum::Lunch,
                             sections: get_test_sections(),
                         },
                     ],

@@ -43,21 +43,21 @@ impl DateMenu {
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct Menu {
-    pub name: Restaurant,
+    pub name: RestaurantEnum,
     pub meals: Vec<MenuMeal>,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct MenuMeal {
-    pub name: Meal,
+    pub name: MealEnum,
     pub sections: Vec<Section>,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct RestaurantMenu {
     pub date: String,
-    pub restaurant: Restaurant,
-    pub meal: Meal,
+    pub restaurant: RestaurantEnum,
+    pub meal: MealEnum,
     pub sections: Vec<Section>,
 }
 
@@ -68,13 +68,13 @@ pub struct Section {
 }
 
 #[derive(Debug, EnumIter, Serialize, Deserialize, PartialEq, Clone)]
-pub enum Restaurant {
+pub enum RestaurantEnum {
     BruinPlate,
     DeNeve,
     Epicuria,
 }
 
-impl Restaurant {
+impl RestaurantEnum {
     pub fn name(&self) -> String {
         match self {
             Self::BruinPlate => "Bruin Plate".into(),
@@ -93,13 +93,13 @@ impl Restaurant {
 }
 
 #[derive(Debug, EnumIter, Serialize, Deserialize, PartialEq, Clone)]
-pub enum Meal {
+pub enum MealEnum {
     Breakfast,
     Lunch,
     Dinner,
 }
 
-impl Meal {
+impl MealEnum {
     pub fn name(&self) -> String {
         match self {
             Self::Breakfast => "Breakfast".into(),
