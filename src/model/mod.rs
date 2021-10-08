@@ -6,6 +6,18 @@ use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
 
 #[derive(Serialize, Deserialize, Debug, PartialEq)]
+pub struct Menu {
+    pub name: Restaurant,
+    pub meals: Vec<MenuMeal>,
+}
+
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
+pub struct MenuMeal {
+    pub name: Meal,
+    pub sections: Vec<Section>,
+}
+
+#[derive(Serialize, Deserialize, Debug, PartialEq)]
 pub struct RestaurantMenu {
     pub date: String,
     pub restaurant: Restaurant,
