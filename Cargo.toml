@@ -19,4 +19,6 @@ url = "2.2.2"
 async-trait = "0.1.51"
 
 [lib]
-crate-type = ["lib"]
+name = "ucla_dining_scraper"
+path = "src/lib.rs"
+test = true
