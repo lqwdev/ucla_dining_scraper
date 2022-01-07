@@ -17,15 +17,11 @@ pub fn parse(doc: &str, request: &MenuRequest) -> RestaurantMenu {
 fn parse_sections(doc: &Html) -> Vec<Section> {
     doc.select(&Selector::parse("li").unwrap())
         .filter(|e| e.value().attr("class") == Some("sect-item"))
-        .map(|section| parse_section(&section))
+        .map(|section| Section {
+            name: parse_section_name(&section),
+            items: parse_section_items(&section),
+        })
         .collect()
-}
-
-fn parse_section(section: &ElementRef) -> Section {
-    Section {
-        name: parse_section_name(section),
-        items: parse_section_items(section),
-    }
 }
 
 fn parse_section_name(section: &ElementRef) -> String {

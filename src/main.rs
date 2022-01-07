@@ -100,7 +100,7 @@ fn save_json(menu: &DateMenu, dir: &str, pretty: bool) -> Result<(), Box<dyn std
         .write(true)
         .open(format!("{}/{}", dir, filename))?;
 
-        if pretty {
+    if pretty {
         serde_json::to_writer_pretty(file, &menu.to_json())?;
     } else {
         serde_json::to_writer(file, &menu.to_json_min())?;
