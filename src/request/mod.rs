@@ -1,5 +1,5 @@
 pub mod item;
-pub mod menu_request;
+pub mod menu;
 
 use crate::model::DateMenu;
 use crate::parse::parse_menu;
@@ -16,7 +16,7 @@ pub trait Downloadable {
 }
 
 pub async fn download_menus(date: String) -> Result<DateMenu, Box<dyn std::error::Error>> {
-    let requests = menu_request::menu_requests_for_dates(vec![date.clone()]);
+    let requests = menu::menu_requests_for_dates(vec![date.clone()]);
     let mut date_menu = DateMenu {
         date: date.clone(),
         restaurants: Vec::new(),

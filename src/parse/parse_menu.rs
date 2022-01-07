@@ -1,5 +1,5 @@
 use crate::model::{Item, RestaurantMenu, Section};
-use crate::request::menu_request::MenuRequest;
+use crate::request::menu::MenuRequest;
 use scraper::element_ref::ElementRef;
 use scraper::{Html, Selector};
 use url::Url;

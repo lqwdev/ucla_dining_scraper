@@ -11,6 +11,16 @@ pub struct MenuRequest {
     pub meal: MealEnum,
 }
 
+impl MenuRequest {
+    fn new(date: String, restaurant: RestaurantEnum, meal: MealEnum) -> Self {
+        MenuRequest {
+            date: date,
+            restaurant: restaurant,
+            meal: meal,
+        }
+    }
+}
+
 #[async_trait]
 impl Downloadable for MenuRequest {
     fn url(&self) -> String {
@@ -32,16 +42,8 @@ pub fn menu_requests_for_dates(dates: Vec<String>) -> Vec<MenuRequest> {
     RestaurantEnum::iter()
         .cartesian_product(dates)
         .cartesian_product(MealEnum::iter())
-        .map(|((res, date), meal)| menu_request(date, res, meal))
+        .map(|((res, date), meal)| MenuRequest::new(date, res, meal))
         .collect()
-}
-
-fn menu_request(date: String, restaurant: RestaurantEnum, meal: MealEnum) -> MenuRequest {
-    MenuRequest {
-        date: date,
-        restaurant: restaurant,
-        meal: meal,
-    }
 }
 
 /// Verify that the date string is in correct YYYY-MM-DD format
@@ -89,7 +91,7 @@ mod tests {
     #[test]
     fn test_menu_request_url() {
         assert_eq!(
-            menu_request(
+            MenuRequest::new(
                 "2021-09-28".into(),
                 RestaurantEnum::BruinPlate,
                 MealEnum::Breakfast
@@ -98,7 +100,7 @@ mod tests {
             "http://menu.dining.ucla.edu/Menus/BruinPlate/2021-09-28/Breakfast",
         );
         assert_eq!(
-            menu_request(
+            MenuRequest::new(
                 "2021-09-28".into(),
                 RestaurantEnum::DeNeve,
                 MealEnum::Breakfast
@@ -107,7 +109,7 @@ mod tests {
             "http://menu.dining.ucla.edu/Menus/DeNeve/2021-09-28/Breakfast",
         );
         assert_eq!(
-            menu_request(
+            MenuRequest::new(
                 "2021-09-26".into(),
                 RestaurantEnum::Epicuria,
                 MealEnum::Lunch
@@ -122,84 +124,84 @@ mod tests {
         assert_eq!(
             menu_requests_for_dates(vec!["2020-08-18".into(), "2020-08-19".into()]),
             vec![
-                menu_request(
+                MenuRequest::new(
                     "2020-08-18".into(),
                     RestaurantEnum::BruinPlate,
                     MealEnum::Breakfast
                 ),
-                menu_request(
+                MenuRequest::new(
                     "2020-08-18".into(),
                     RestaurantEnum::BruinPlate,
                     MealEnum::Lunch
                 ),
-                menu_request(
+                MenuRequest::new(
                     "2020-08-18".into(),
                     RestaurantEnum::BruinPlate,
                     MealEnum::Dinner
                 ),
-                menu_request(
+                MenuRequest::new(
                     "2020-08-19".into(),
                     RestaurantEnum::BruinPlate,
                     MealEnum::Breakfast
                 ),
-                menu_request(
+                MenuRequest::new(
                     "2020-08-19".into(),
                     RestaurantEnum::BruinPlate,
                     MealEnum::Lunch
                 ),
-                menu_request(
+                MenuRequest::new(
                     "2020-08-19".into(),
                     RestaurantEnum::BruinPlate,
                     MealEnum::Dinner
                 ),
-                menu_request(
+                MenuRequest::new(
                     "2020-08-18".into(),
                     RestaurantEnum::DeNeve,
                     MealEnum::Breakfast
                 ),
-                menu_request("2020-08-18".into(), RestaurantEnum::DeNeve, MealEnum::Lunch),
-                menu_request(
+                MenuRequest::new("2020-08-18".into(), RestaurantEnum::DeNeve, MealEnum::Lunch),
+                MenuRequest::new(
                     "2020-08-18".into(),
                     RestaurantEnum::DeNeve,
                     MealEnum::Dinner
                 ),
-                menu_request(
+                MenuRequest::new(
                     "2020-08-19".into(),
                     RestaurantEnum::DeNeve,
                     MealEnum::Breakfast
                 ),
-                menu_request("2020-08-19".into(), RestaurantEnum::DeNeve, MealEnum::Lunch),
-                menu_request(
+                MenuRequest::new("2020-08-19".into(), RestaurantEnum::DeNeve, MealEnum::Lunch),
+                MenuRequest::new(
                     "2020-08-19".into(),
                     RestaurantEnum::DeNeve,
                     MealEnum::Dinner
                 ),
-                menu_request(
+                MenuRequest::new(
                     "2020-08-18".into(),
                     RestaurantEnum::Epicuria,
                     MealEnum::Breakfast
                 ),
-                menu_request(
+                MenuRequest::new(
                     "2020-08-18".into(),
                     RestaurantEnum::Epicuria,
                     MealEnum::Lunch
                 ),
-                menu_request(
+                MenuRequest::new(
                     "2020-08-18".into(),
                     RestaurantEnum::Epicuria,
                     MealEnum::Dinner
                 ),
-                menu_request(
+                MenuRequest::new(
                     "2020-08-19".into(),
                     RestaurantEnum::Epicuria,
                     MealEnum::Breakfast
                 ),
-                menu_request(
+                MenuRequest::new(
                     "2020-08-19".into(),
                     RestaurantEnum::Epicuria,
                     MealEnum::Lunch
                 ),
-                menu_request(
+                MenuRequest::new(
                     "2020-08-19".into(),
                     RestaurantEnum::Epicuria,
                     MealEnum::Dinner

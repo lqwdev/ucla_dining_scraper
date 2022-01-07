@@ -8,9 +8,7 @@ pub struct ItemRequest {
 
 impl ItemRequest {
     fn new(id: String) -> Self {
-        ItemRequest {
-            id: id
-        }
+        ItemRequest { id: id }
     }
 }
 
