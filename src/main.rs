@@ -85,25 +85,25 @@ fn save(app: &ArgMatches, menu: &DateMenu) -> Result<(), Box<dyn std::error::Err
         };
         print!("Storing menus for {} on disk to {} ... \t", menu.date, dir);
 
-        let suffix = {
-            if app.is_present("save-pretty") {
-                "-pretty"
-            } else {
-                ""
-            }
-        };
-        let filename = format!("{}{}", menu.date, suffix);
-        let file = OpenOptions::new()
-            .create(true)
-            .truncate(true)
-            .write(true)
-            .open(format!("{}/{}", dir, filename))?;
+        save_json(&menu, dir, app.is_present("save-pretty"))?;
+    }
 
-        if app.is_present("save") {
-            serde_json::to_writer(file, &menu.to_json_min())?;
-        } else {
-            serde_json::to_writer_pretty(file, &menu.to_json())?;
-        }
+    Ok(())
+}
+
+fn save_json(menu: &DateMenu, dir: &str, pretty: bool) -> Result<(), Box<dyn std::error::Error>> {
+    let suffix = if pretty { "-pretty" } else { "" };
+    let filename = format!("{}{}", menu.date, suffix);
+    let file = OpenOptions::new()
+        .create(true)
+        .truncate(true)
+        .write(true)
+        .open(format!("{}/{}", dir, filename))?;
+
+        if pretty {
+        serde_json::to_writer_pretty(file, &menu.to_json())?;
+    } else {
+        serde_json::to_writer(file, &menu.to_json_min())?;
     }
 
     Ok(())
