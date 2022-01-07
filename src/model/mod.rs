@@ -1,7 +1,7 @@
 pub mod display;
 pub mod storage;
 
-use crate::request::item_request::ItemRequest;
+use crate::request::item::ItemRequest;
 use serde::{Deserialize, Serialize};
 use strum_macros::EnumIter;
 
@@ -129,7 +129,6 @@ impl Item {
     pub fn details_request(&self) -> ItemRequest {
         ItemRequest {
             id: self.id.clone(),
-            url: self.recipe_link.clone(),
         }
     }
 
